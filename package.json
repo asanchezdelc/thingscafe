@@ -1,0 +1,51 @@
+{
+  "name": "thingscafe",
+  "version": "1.0.0",
+  "description": "Easy things visualization dashboard",
+  "main": "index.js",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "keywords": [
+    "iot",
+    "esp32",
+    "es8266",
+    "arduino",
+    "raspberrypi"
+  ],
+  "author": "Adrian Sanchezdelc <adrian@ticadia.com>",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "bootstrap": "^4.3.1",
+    "cors": "^2.8.5",
+    "dotenv": "^8.0.0",
+    "express": "^4.17.1",
+    "morgan": "^1.9.1",
+    "mosca": "^2.8.3",
+    "react": "^16.8.6",
+    "react-bootstrap": "^1.0.0-beta.10",
+    "react-dom": "^16.8.6",
+    "react-script-loader-hoc": "^1.2.2",
+    "react-scripts": "3.0.1",
+    "redis": "^2.8.0"
+  }
+}
