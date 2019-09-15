@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ScriptLoader from 'react-script-loader-hoc';
+import mqtt from 'mqtt';
 
 class MqttWS extends React.Component {
 
@@ -11,12 +11,14 @@ class MqttWS extends React.Component {
         ws: null,
         attempts: 1
       };
+
+      this.setupWebsocket = this.setupWebsocket.bind(this)
+      this.onPublish = this.onPublish.bind(this);
+      
     }
 
-    componentWillReceiveProps ({ scriptsLoadedSuccessfully }) {
-        if (!scriptsLoadedSuccessfully)  return;
-
-        this.initWebsocket();
+    onPublish(topic, msg) {
+      console.log(topic, msg)
     }
 
     initWebsocket() {
@@ -27,7 +29,7 @@ class MqttWS extends React.Component {
           ws: state.ws || mqtt.connect(this.props.url),
           attempts: 1
         })
-      );      
+      , this.setupWebsocket);
     }
 
     logging(logline) {
@@ -43,32 +45,23 @@ class MqttWS extends React.Component {
         return Math.min(30, (Math.pow(2, k) - 1)) * 1000;
     }
 
-    componentDidUpdate() {
-      this.setupWebsocket()
-    }
-
     setupWebsocket() {
       let websocket = this.state.ws;
       let props = this.props;
-
-      websocket.subscribe("bus/+/events");
+      //websocket.subscribe("bus/+/events");
+      websocket.subscribe("v1/+/things/+/data/#");
       websocket.on("message", function(topic, payload) {
           //alert([topic, payload].join(": "));
           //client.end();
           props.onMessage({ topic: topic, msg: payload});
       });
-          
-
-      /*
-      websocket.onopen = () => {
+      
+      websocket.on('connect', () => {
         this.logging('Websocket connected');
-        if (typeof this.props.onOpen === 'function') this.props.onOpen();
-      };
-
-      websocket.onmessage = (evt) => {
-        this.props.onMessage(evt.data);
-      };
-
+        if (typeof props.onOpen === 'function') props.onOpen(websocket);
+      });
+      /*
+     
       this.shouldReconnect = this.props.reconnect;
       websocket.onclose = () => {
         this.logging('Websocket disconnected');
@@ -85,11 +78,7 @@ class MqttWS extends React.Component {
     }
 
     componentDidMount() {
-        const { scriptsLoadedSuccessfully } = this.props
-        if (scriptsLoadedSuccessfully) {
-            console.log('init...')
-            this.initWebsocket();
-        }
+      this.initWebsocket();
     }
 
     componentWillUnmount() {
@@ -119,6 +108,7 @@ MqttWS.defaultProps = {
 MqttWS.propTypes = {
     url: PropTypes.string.isRequired,
     onMessage: PropTypes.func.isRequired,
+    onPublish: PropTypes.func,
     onOpen: PropTypes.func,
     onClose: PropTypes.func,
     debug: PropTypes.bool,
@@ -127,6 +117,6 @@ MqttWS.propTypes = {
     reconnectIntervalInMilliSeconds : PropTypes.number
 };
 
-export default ScriptLoader('./utils/mqtt.js')(MqttWS)
+export default MqttWS;
 
 //export default Websocket;
