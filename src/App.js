@@ -251,7 +251,7 @@ class App extends React.Component {
         </Row>
        
       </Container>
-      <MqttWS url="ws://localhost:3000" onMessage={this.handleData} onOpen={ this.wsOpen } debug={true} />
+      <MqttWS url={`ws://${window.location.hostname}:3000`} onMessage={this.handleData} onOpen={ this.wsOpen } debug={true} />
 
       </div>
     );
