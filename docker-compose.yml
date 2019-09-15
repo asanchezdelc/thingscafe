@@ -1,0 +1,17 @@
+version: "3"
+services:
+  appserver:
+    ports:
+      - '3000:3000'
+      - '1883:1883'
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/thingscafe
+    links:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+  redis:
+    image: redis:4-alpine
